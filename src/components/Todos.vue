@@ -11,6 +11,7 @@
       />
     </header>
     <div class="main">
+      <input type="checkbox"  v-model="allDone"/>
       <ul class="todo-list">
         <li
           class="todo"
@@ -28,9 +29,9 @@
     <footer class="footer">
       <span class="todo-count"><strong>{{ remaining }}</strong> Tâche(s) a faire</span>
       <ul class="filters">
-        <li><a href="1" :class="{selected: filter === 'all'}" @click.prevent="filter ='all'" >Toutes </a></li>
-        <li><a href="1" :class="{selected: filter === 'todo'}" @click.prevent="filter ='todo'" >A faire </a></li>
-        <li><a href="2" :class="{selected: filter === 'done'}" @click.prevent="filter ='done'" >Faites </a></li>
+        <li><a href="#" :class="{selected: filter === 'all'}" @click.prevent="filter ='all'" >Toutes </a></li>
+        <li><a href="#" :class="{selected: filter === 'todo'}" @click.prevent="filter ='todo'" >A faire </a></li>
+        <li><a href="#" :class="{selected: filter === 'done'}" @click.prevent="filter ='done'" >Faites </a></li>
       </ul>
     </footer>
   </section>
@@ -60,10 +61,21 @@ export default {
     }
   },
   computed: {
+    allDone: {
+      get () {
+        return this.remaining === 0
+      },
+      set (value) {
+        this.todos.forEach(todo => {
+          todo.completed = value
+        })
+      }
+    },
     remaining () {
       return this.todos.filter(todo => !todo.completed).length
     },
     filteredTodos () {
+      console.log('console log du filter : ' + this.filter)
       if (this.filter === 'todo') {
         return this.todos(todo => !todo.completed)
       } else if (this.filter === 'done') {
