@@ -11,29 +11,31 @@
       />
     </header>
     <div class="main">
-      <input type="checkbox"  v-model="allDone"/>
+      <input type="checkbox" v-model="allDone">
+      <label for="toggle-all">Mark all as complete</label>
       <ul class="todo-list">
         <li
           class="todo"
           v-for="todo in filteredTodos"
-          :class="{ completed: todo.completed }"
           :key="todo.id"
+          :class="{ completed: todo.completed }"
         >
           <div class="view">
-            <input type="checkbox" v-model="todo.completed" class="toggle" />
+            <input class="toggle" type="checkbox" v-model="todo.completed">
             <label> {{ todo.name }}</label>
             <button class="destroy" @click.prevent="deleteTodo(todo)"></button>
           </div>
         </li>
       </ul>
     </div>
-    <footer class="footer" v-show="todos.length > 0 ">
+    <footer class="footer" v-show="hasTodos">
       <span class="todo-count"><strong>{{ remaining }}</strong> Tâche(s) a faire</span>
       <ul class="filters">
         <li><a href="#" :class="{selected: filter === 'all'}" @click.prevent="filter ='all'" >Toutes </a></li>
         <li><a href="#" :class="{selected: filter === 'todo'}" @click.prevent="filter ='todo'" >A faire </a></li>
         <li><a href="#" :class="{selected: filter === 'done'}" @click.prevent="filter ='done'" >Faites </a></li>
       </ul>
+      <button class="clear-completed" v-show="completed" @click.prevent="deletedCompleted">Supprimer les taches finies</button>
     </footer>
   </section>
 </template>
@@ -62,6 +64,9 @@ export default {
     },
     deleteTodo (todo) {
       this.todos = this.todos.filter(i => i !== todo)
+    },
+    deletedCompleted () {
+      this.todos = this.todos.filter(todo => !todo.completed)
     }
   },
   computed: {
@@ -78,6 +83,13 @@ export default {
     remaining () {
       return this.todos.filter(todo => !todo.completed).length
     },
+    completed () {
+      return this.todos.filter(todo => !todo.completed).length
+    },
+    hasTodos () {
+      return this.todos.length > 0
+    },
+
     filteredTodos () {
       console.log('console log du filter : ' + this.filter)
       if (this.filter === 'todo') {
