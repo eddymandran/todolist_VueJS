@@ -18,13 +18,14 @@
           class="todo"
           v-for="todo in filteredTodos"
           :key="todo.id"
-          :class="{ completed: todo.completed }"
+          :class="{ completed: todo.completed, editing: todo === editing}"
         >
           <div class="view">
             <input class="toggle" type="checkbox" v-model="todo.completed">
-            <label> {{ todo.name }}</label>
+            <label @dblclick="editTodo(todo)"> {{ todo.name }}</label>
             <button class="destroy" @click.prevent="deleteTodo(todo)"></button>
           </div>
+          <input type="text" class="edit" v-model="todo.name" @keyup.enter="doneEdit" @blur="doneEdit" @keyup.esc="cancelEdit" v-focus="todo === editing">
         </li>
       </ul>
     </div>
@@ -40,6 +41,8 @@
   </section>
 </template>
 <script>
+import Vue from 'vue'
+
 export default {
   data () {
     return {
@@ -50,7 +53,9 @@ export default {
         }
       ],
       newTodo: '',
-      filter: 'all'
+      filter: 'all',
+      editing: null,
+      oldTodo: ''
     }
   },
   methods: {
@@ -67,6 +72,17 @@ export default {
     },
     deletedCompleted () {
       this.todos = this.todos.filter(todo => !todo.completed)
+    },
+    editTodo (todo) {
+      this.editing = todo
+      this.oldTodo = todo.name
+    },
+    doneEdit () {
+      this.editing = null
+    },
+    cancelEdit () {
+      this.editing.name = this.oldTodo
+      this.doneEdit()
     }
   },
   computed: {
@@ -98,6 +114,15 @@ export default {
         return this.todos(todo => todo.completed)
       }
       return this.todos
+    }
+  },
+  directives: {
+    focus (el, value) {
+      if (value) {
+        Vue.nextTick(_ => {
+          el.focus()
+        })
+      }
     }
   }
 }
