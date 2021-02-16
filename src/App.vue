@@ -3,9 +3,11 @@
   <carousel>
     <carousel-slide>
       Salut les gens
+      <img src="https://picsum.photos/630/300?random=1">
     </carousel-slide>
     <carousel-slide>
       Au revoir les gens
+      <img src="https://picsum.photos/630/300?random=2">
     </carousel-slide>
   </carousel>
   <todos v-model="todos"></todos>
