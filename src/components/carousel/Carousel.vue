@@ -1,8 +1,8 @@
 <template>
     <div class="carousel">
         <slot></slot>
-        <button class="carousel__nav carousel__next" @click.prevent="next">Suivante</button>
-        <button class="carousel__nav prev" @click.prevent="prev">Precedente</button>
+        <button class="carousel__nav carousel__next" @click.prevent="next"></button>
+        <button class="carousel__nav prev" @click.prevent="prev"></button>
     </div>
 </template>
 
@@ -12,7 +12,8 @@ export default {
     console.log(this.$children)
     return {
       index: 0,
-      slides: []
+      slides: [],
+      direction: null
     }
   },
   mounted () {
@@ -27,12 +28,14 @@ export default {
   methods: {
     next () {
       this.index++
+      this.direction = 'right'
       if (this.index >= this.slidesCount) {
         this.index = 0
       }
     },
     prev () {
       this.index--
+      this.direction = 'left'
       if (this.index < 0) {
         this.index = this.slidesCount - 1
       }
@@ -40,3 +43,24 @@ export default {
   }
 }
 </script>
+<style>
+.carousel {
+    position: relative;
+}
+
+.carousel__nav{
+    position: absolute;
+    top: 50%;
+    margin-top: -31px;
+    left: 10px;
+    background: url(prev.png);
+    width: 63px;
+    height: 63px;
+}
+
+.carousel__nav.carousel__next{
+    right: 10px;
+    left: auto;
+    background-image: url(next.png);
+}
+</style>
