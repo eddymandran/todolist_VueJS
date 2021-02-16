@@ -111,7 +111,6 @@ export default {
     },
 
     filteredTodos () {
-      console.log('console log du filter : ' + this.filter)
       if (this.filter === 'todo') {
         return this.todos(todo => !todo.completed)
       } else if (this.filter === 'done') {
